@@ -24,7 +24,7 @@ public class Main {
         string = new String(list);
 
         System.out.println(list);
-
+        System.out.println("HI\n");
     }
 
 
@@ -38,15 +38,18 @@ public class Main {
                 bean.getCurrentThreadCpuTime() : 0L;
     }
 
+    /** Generates a random char array of size N ranging from minV to Max V, adds a null terminator at the kth index **/
     public static char[] generateTestList(int N, int k, int minV, int maxV) {
         char[] charList = new char[N];
         Random rand = new Random();
-
+        /** fill a char array with random chars from minV to maxV **/
         for ( int i = 0; i < N; i++)
         {
 
             charList[i] = (char) (rand.nextInt( maxV - minV + 1) + minV);
-            if ( i == N - 1)
+
+            /** insert a null character at the end of charList **/
+            if ( i == k)
             {
                 charList[i] = '\0';
             }
