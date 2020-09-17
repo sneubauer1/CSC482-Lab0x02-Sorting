@@ -15,7 +15,7 @@ public class Main {
         String string;
         char[] list;
         list = generateTestList(N, k, minV, maxV );
-        //
+
         for ( int i = 0; i <N; i++)
         {
             System.out.println(list[i]);
