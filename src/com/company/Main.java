@@ -7,7 +7,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        // write your code here
+
         int N = 1000;
         int k = 12;
         int d = 8;
@@ -18,7 +18,7 @@ public class Main {
         //runTimeTestsInsertionSort();
         //runTimeTestsMergeSort();
         //runTimeTestsQuickSort();
-        runTimeTestsRadixSort();
+        //runTimeTestsRadixSort();
 
     }
 
@@ -396,7 +396,7 @@ public class Main {
                 while( totalTime < maxTime && trialCount < maxTrials)
                 {
                     timeStampBeforeInsertionSort = getCpuTime();
-                    threeWayRadixQSort(list,0, list.length-1,d );
+                    radixSort(list, d);
                     timeStampAfterInsertionSort = getCpuTime();
                     timeMeasureForInsertionSort = timeStampAfterInsertionSort - timeStampBeforeInsertionSort;
                     totalTime = totalTime + timeMeasureForInsertionSort;
