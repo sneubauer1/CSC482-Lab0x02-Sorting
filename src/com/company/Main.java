@@ -14,30 +14,11 @@ public class Main {
         int minV = 65;
         int maxV = 90;
 
-        char[][] charList;
-        charList = generateTestList(N, k, minV, maxV );
-        String[] list = convert2dCharToStringList(charList);
-        System.out.println("Before Sorting");
-        printStringList(list);
-        //quickSort(list,0, list.length-1);
-        //threeWayRadixQSort(updateList,0, updateList.length-1, 0);
-        lsd(list, d);
-        System.out.println();
-        System.out.println("After Sorting");
-
-        printStringList(list);
-        boolean sort;
-
-        sort = isSorted(list);
-        if(sort == true){
-            System.out.println("Generating list of length "+list.length+" , key width of "+k+" Sorted!");
-        }
-
-        System.out.println();
-        char mymax;
-        mymax = max(charList);
-        System.out.println("charmax is :" + mymax);
-
+        //verificationTests();
+        //runTimeTestsInsertionSort();
+        //runTimeTestsMergeSort();
+        //runTimeTestsQuickSort();
+        runTimeTestsRadixSort();
 
     }
 
@@ -52,19 +33,519 @@ public class Main {
                 bean.getCurrentThreadCpuTime() : 0L;
     }
 
+    public static void runTimeTestsInsertionSort()
+    {
+        int N;
+        int k = 6;
+        int d = 1;
+        int minV = 1;
+        int maxV = 255;
+        char[][] charList;
+        String [] list;
+        int N_Min = 1;
+        int N_Max = 1000000000;
+        int k_Min = 6;
+        int k_Max = 48;
+        long maxTime = 10000000;
+        long maxTrials = 5;
+        long totalTime = 0;
+        long trialCount = 0;
+        long timeStampBeforeInsertionSort = 0;
+        long timeStampAfterInsertionSort = 0;
+        long timeMeasureForInsertionSort = 0;
+        long averageTimeMeasured = 0;
+        double predictedDoublingRatio = 1;
+        long k6average = 0;
+        long k12average = 0;
+        long k24average = 0;
+        long k48average = 0;
+        double k6double = 0;
+        double k12double = 0;
+        double k24double = 0;
+        double k48double = 0;
+        double k6previous = 0;
+        double k12previous = 0;
+        double k24previous = 0;
+        double k48previous = 0;
+        /**Print Column Headings**/
+        System.out.printf("\n%120s", "Results for Insertion Sort\n");
+        System.out.printf("\n%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", "N","k = 6 Time","Doubling Ratio","k = 12 Time", "Doubling Ratio", "k = 24 Time", "Doubling Ratio","k = 48 Time","Doubling Ratio","Predicted Doubling Ratio");
+        System.out.printf("%195s\n", "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for ( N = N_Min; N <= N_Max; N = N * 2)
+        {
+
+
+            for( k = k_Min; k <= k_Max; k = k * 2)
+            {
+                charList = generateTestList(N, k, minV, maxV);
+                list = convert2dCharToStringList(charList);
+                totalTime = 0;
+                trialCount = 0;
+                while( totalTime < maxTime && trialCount < maxTrials)
+                {
+                    timeStampBeforeInsertionSort = getCpuTime();
+                    insertionSort(list);
+                    timeStampAfterInsertionSort = getCpuTime();
+                    timeMeasureForInsertionSort = timeStampAfterInsertionSort - timeStampBeforeInsertionSort;
+                    totalTime = totalTime + timeMeasureForInsertionSort;
+                    trialCount++;
+
+                }
+                averageTimeMeasured = totalTime / trialCount;
+                if ( k == 6)
+                {
+                    k6average = averageTimeMeasured;
+                    k6double = (double)averageTimeMeasured / k6previous;
+                    k6previous = averageTimeMeasured;
+
+                }
+                if ( k == 12)
+                {
+                    k12average = averageTimeMeasured;
+                    k12double = (double)averageTimeMeasured / k12previous;
+                    k12previous = averageTimeMeasured;
+                }
+                if ( k == 24)
+                {
+                    k24average = averageTimeMeasured;
+                    k24double = (double)averageTimeMeasured / k24previous;
+                    k24previous = averageTimeMeasured;
+                }
+                if ( k == 48)
+                {
+                    k48average = averageTimeMeasured;
+                    k48double = (double)averageTimeMeasured / k48previous;
+                    k48previous = averageTimeMeasured;
+                }
+
+            }
+            if ( (N*N/2) == 0){
+                predictedDoublingRatio = 2.0;
+            }
+            else if ( N != N_Min)
+            {
+                predictedDoublingRatio = (N * N) / (N * N / 2);
+            }
+            if ( N == 1 )
+            {
+                String notApplicable = "na";
+                System.out.printf("%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", N,k6average,notApplicable,k12average, notApplicable, k24average, notApplicable,k48average,notApplicable,notApplicable);
+            } else{
+                System.out.printf("%20s %16s %16.2f %16s %16.2f %16s %16.2f %16s %22.2f %30s\n", N,k6average,k6double,k12average, k12double, k24average, k24double,k48average,k48double,predictedDoublingRatio);
+            }
+        }
+    }
+
+    public static void runTimeTestsMergeSort()
+    {
+        int N;
+        int k = 6;
+        int d = 1;
+        int minV = 1;
+        int maxV = 255;
+        char[][] charList;
+        String [] list;
+        int N_Min = 1;
+        int N_Max = 1000000000;
+        int k_Min = 6;
+        int k_Max = 48;
+        long maxTime = 10000000;
+        long maxTrials = 5;
+        long totalTime = 0;
+        long trialCount = 0;
+        long timeStampBeforeInsertionSort = 0;
+        long timeStampAfterInsertionSort = 0;
+        long timeMeasureForInsertionSort = 0;
+        long averageTimeMeasured = 0;
+        double predictedDoublingRatio = 1;
+        long k6average = 0;
+        long k12average = 0;
+        long k24average = 0;
+        long k48average = 0;
+        double k6double = 0;
+        double k12double = 0;
+        double k24double = 0;
+        double k48double = 0;
+        double k6previous = 0;
+        double k12previous = 0;
+        double k24previous = 0;
+        double k48previous = 0;
+        /**Print Column Headings**/
+        System.out.printf("\n%120s", "Results for Merge Sort\n");
+        System.out.printf("\n%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", "N","k = 6 Time","Doubling Ratio","k = 12 Time", "Doubling Ratio", "k = 24 Time", "Doubling Ratio","k = 48 Time","Doubling Ratio","Predicted Doubling Ratio");
+        System.out.printf("%195s\n", "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for ( N = N_Min; N <= N_Max; N = N * 2)
+        {
+
+
+            for( k = k_Min; k <= k_Max; k = k * 2)
+            {
+                charList = generateTestList(N, k, minV, maxV);
+                list = convert2dCharToStringList(charList);
+                totalTime = 0;
+                trialCount = 0;
+                while( totalTime < maxTime && trialCount < maxTrials)
+                {
+                    timeStampBeforeInsertionSort = getCpuTime();
+                    mergeSort(list);
+                    timeStampAfterInsertionSort = getCpuTime();
+                    timeMeasureForInsertionSort = timeStampAfterInsertionSort - timeStampBeforeInsertionSort;
+                    totalTime = totalTime + timeMeasureForInsertionSort;
+                    trialCount++;
+
+                }
+                averageTimeMeasured = totalTime / trialCount;
+                if ( k == 6)
+                {
+                    k6average = averageTimeMeasured;
+                    k6double = (double)averageTimeMeasured / k6previous;
+                    k6previous = averageTimeMeasured;
+
+                }
+                if ( k == 12)
+                {
+                    k12average = averageTimeMeasured;
+                    k12double = (double)averageTimeMeasured / k12previous;
+                    k12previous = averageTimeMeasured;
+                }
+                if ( k == 24)
+                {
+                    k24average = averageTimeMeasured;
+                    k24double = (double)averageTimeMeasured / k24previous;
+                    k24previous = averageTimeMeasured;
+                }
+                if ( k == 48)
+                {
+                    k48average = averageTimeMeasured;
+                    k48double = (double)averageTimeMeasured / k48previous;
+                    k48previous = averageTimeMeasured;
+                }
+
+            }
+            if ( ((N/2)*(log2(N-1))) == 0){
+                predictedDoublingRatio = 2.1;
+            }
+            else if ( N != N_Min)
+            {
+                predictedDoublingRatio = (N*(log2(N)))/((N/2)*(log2(N-1)));
+            }
+            if ( N == 1 )
+            {
+                String notApplicable = "na";
+                System.out.printf("%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", N,k6average,notApplicable,k12average, notApplicable, k24average, notApplicable,k48average,notApplicable,notApplicable);
+            } else{
+                System.out.printf("%20s %16s %16.2f %16s %16.2f %16s %16.2f %16s %22.2f %30s\n", N,k6average,k6double,k12average, k12double, k24average, k24double,k48average,k48double,predictedDoublingRatio);
+            }
+        }
+    }
+
+    public static void runTimeTestsQuickSort()
+    {
+        int N;
+        int k = 6;
+        int d = 1;
+        int minV = 1;
+        int maxV = 255;
+        char[][] charList;
+        String [] list;
+        int N_Min = 1;
+        int N_Max = 1000000000;
+        int k_Min = 6;
+        int k_Max = 48;
+        long maxTime = 10000000;
+        long maxTrials = 5;
+        long totalTime = 0;
+        long trialCount = 0;
+        long timeStampBeforeInsertionSort = 0;
+        long timeStampAfterInsertionSort = 0;
+        long timeMeasureForInsertionSort = 0;
+        long averageTimeMeasured = 0;
+        double predictedDoublingRatio = 1;
+        long k6average = 0;
+        long k12average = 0;
+        long k24average = 0;
+        long k48average = 0;
+        double k6double = 0;
+        double k12double = 0;
+        double k24double = 0;
+        double k48double = 0;
+        double k6previous = 0;
+        double k12previous = 0;
+        double k24previous = 0;
+        double k48previous = 0;
+        /**Print Column Headings**/
+        System.out.printf("\n%120s", "Results for Quick Sort\n");
+        System.out.printf("\n%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", "N","k = 6 Time","Doubling Ratio","k = 12 Time", "Doubling Ratio", "k = 24 Time", "Doubling Ratio","k = 48 Time","Doubling Ratio","Predicted Doubling Ratio");
+        System.out.printf("%195s\n", "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for ( N = N_Min; N <= N_Max; N = N * 2)
+        {
+
+
+            for( k = k_Min; k <= k_Max; k = k * 2)
+            {
+                charList = generateTestList(N, k, minV, maxV);
+                list = convert2dCharToStringList(charList);
+                totalTime = 0;
+                trialCount = 0;
+                while( totalTime < maxTime && trialCount < maxTrials)
+                {
+                    timeStampBeforeInsertionSort = getCpuTime();
+                    quickSort(list, 0, list.length-1);
+                    timeStampAfterInsertionSort = getCpuTime();
+                    timeMeasureForInsertionSort = timeStampAfterInsertionSort - timeStampBeforeInsertionSort;
+                    totalTime = totalTime + timeMeasureForInsertionSort;
+                    trialCount++;
+
+                }
+                averageTimeMeasured = totalTime / trialCount;
+                if ( k == 6)
+                {
+                    k6average = averageTimeMeasured;
+                    k6double = (double)averageTimeMeasured / k6previous;
+                    k6previous = averageTimeMeasured;
+
+                }
+                if ( k == 12)
+                {
+                    k12average = averageTimeMeasured;
+                    k12double = (double)averageTimeMeasured / k12previous;
+                    k12previous = averageTimeMeasured;
+                }
+                if ( k == 24)
+                {
+                    k24average = averageTimeMeasured;
+                    k24double = (double)averageTimeMeasured / k24previous;
+                    k24previous = averageTimeMeasured;
+                }
+                if ( k == 48)
+                {
+                    k48average = averageTimeMeasured;
+                    k48double = (double)averageTimeMeasured / k48previous;
+                    k48previous = averageTimeMeasured;
+                }
+
+            }
+            if ( ((N/2)*(log2(N-1))) == 0){
+                predictedDoublingRatio = 2.0;
+            }
+            else if ( N != N_Min)
+            {
+                predictedDoublingRatio = (N*(log2(N)))/((N/2)*(log2(N-1)));
+            }
+            if ( N == 1 )
+            {
+                String notApplicable = "na";
+                System.out.printf("%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", N,k6average,notApplicable,k12average, notApplicable, k24average, notApplicable,k48average,notApplicable,notApplicable);
+            } else{
+                System.out.printf("%20s %16s %16.2f %16s %16.2f %16s %16.2f %16s %22.2f %30s\n", N,k6average,k6double,k12average, k12double, k24average, k24double,k48average,k48double,predictedDoublingRatio);
+            }
+        }
+    }
+
+    public static void runTimeTestsRadixSort()
+    {
+        int N;
+        int k = 6;
+        int d = 8;
+        int minV = 1;
+        int maxV = 255;
+        char[][] charList;
+        String [] list;
+        int N_Min = 1;
+        int N_Max = 1000000000;
+        int k_Min = 12;
+        int k_Max = 48;
+        long maxTime = 10000000;
+        long maxTrials = 10000;
+        long totalTime = 0;
+        long trialCount = 0;
+        long timeStampBeforeInsertionSort = 0;
+        long timeStampAfterInsertionSort = 0;
+        long timeMeasureForInsertionSort = 0;
+        long averageTimeMeasured = 0;
+        double predictedDoublingRatio = 1;
+        long k6average = 0;
+        long k12average = 0;
+        long k24average = 0;
+        long k48average = 0;
+        double k6double = 0;
+        double k12double = 0;
+        double k24double = 0;
+        double k48double = 0;
+        double k6previous = 0;
+        double k12previous = 0;
+        double k24previous = 0;
+        double k48previous = 0;
+        /**Print Column Headings**/
+        System.out.printf("\n%120s", "Results for Three Way Radix QSort d = 8\n");
+        System.out.printf("\n%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", "N","k = 6 Time","Doubling Ratio","k = 12 Time", "Doubling Ratio", "k = 24 Time", "Doubling Ratio","k = 48 Time","Doubling Ratio","Predicted Doubling Ratio");
+        System.out.printf("%195s\n", "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for ( N = N_Min; N <= N_Max; N = N * 2)
+        {
+
+
+            for( k = k_Min; k <= k_Max; k = k * 2)
+            {
+                charList = generateTestList(N, k, minV, maxV);
+                list = convert2dCharToStringList(charList);
+                totalTime = 0;
+                trialCount = 0;
+                while( totalTime < maxTime && trialCount < maxTrials)
+                {
+                    timeStampBeforeInsertionSort = getCpuTime();
+                    threeWayRadixQSort(list,0, list.length-1,d );
+                    timeStampAfterInsertionSort = getCpuTime();
+                    timeMeasureForInsertionSort = timeStampAfterInsertionSort - timeStampBeforeInsertionSort;
+                    totalTime = totalTime + timeMeasureForInsertionSort;
+                    trialCount++;
+
+                }
+                averageTimeMeasured = totalTime / trialCount;
+                if ( k == 6)
+                {
+                    k6average = averageTimeMeasured;
+                    k6double = (double)averageTimeMeasured / k6previous;
+                    k6previous = averageTimeMeasured;
+
+                }
+                if ( k == 12)
+                {
+                    k12average = averageTimeMeasured;
+                    k12double = (double)averageTimeMeasured / k12previous;
+                    k12previous = averageTimeMeasured;
+                }
+                if ( k == 24)
+                {
+                    k24average = averageTimeMeasured;
+                    k24double = (double)averageTimeMeasured / k24previous;
+                    k24previous = averageTimeMeasured;
+                }
+                if ( k == 48)
+                {
+                    k48average = averageTimeMeasured;
+                    k48double = (double)averageTimeMeasured / k48previous;
+                    k48previous = averageTimeMeasured;
+                }
+
+            }
+            /*if ( (N/(N/2)) == 0){
+                predictedDoublingRatio = 2.0;
+            }*/
+             if ( N != N_Min)
+            {
+                predictedDoublingRatio = (N/(N/2));
+            }
+            if ( N == 1 )
+            {
+                String notApplicable = "na";
+                System.out.printf("%20s %16s %16s %16s %16s %16s %16s %16s %22s %30s\n", N,k6average,notApplicable,k12average, notApplicable, k24average, notApplicable,k48average,notApplicable,notApplicable);
+            } else{
+                System.out.printf("%20s %16s %16.2f %16s %16.2f %16s %16.2f %16s %22.2f %30s\n", N,k6average,k6double,k12average, k12double, k24average, k24double,k48average,k48double,predictedDoublingRatio);
+            }
+        }
+    }
+
+    public static int log2(int x){
+        return (int) (Math.log(x) / Math.log(2));
+    }
+
     public static void verificationTests()
     {
-        int N = 1000;
-        int k = 12;
-        int d = 8;
+        int N = 32;
+        int k = 3;
+        int d = 3;
         int minV = 65;
         int maxV = 90;
-
         char[][] charList;
+        boolean test;
+        String[] list;
+
+
+        // Verification Test for Insertion Sort
+        /*test = false;
         charList = generateTestList(N, k, minV, maxV );
-        String[] list = convert2dCharToStringList(charList);
+        list = convert2dCharToStringList(charList);
+        System.out.println("Before Sorting");
+        printStringList(list);
+        insertionSort(list);
+        System.out.println();
+        System.out.println("After Sorting");
+        printStringList(list);
+        System.out.println();
+        test = isSorted(list);
+        System.out.println("Generating list of length " + list.length + " , key width of "+ k +":\nTesting on Insertion Sort...");
+        if(test == true)
+        {
+            System.out.println("Boo Yah This list is Sorted!\n");
+        }else{
+            System.out.println("This list is not in order :( sort it out...\n");
+        }
 
+        // Verification Test for Merge Sort
+        test = false;
+        charList = generateTestList(N, k, minV, maxV );
+        list = convert2dCharToStringList(charList);
+        System.out.println("Before Sorting");
+        printStringList(list);
+        mergeSort(list);
+        System.out.println();
+        System.out.println("After Sorting");
+        printStringList(list);
+        System.out.println();
+        test = isSorted(list);
+        System.out.println("Generating list of length " + list.length + " , key width of "+ k +":\nTesting on Merge Sort...");
+        if(test == true)
+        {
+            System.out.println("Boo Yah This list is Sorted!");
+        }else{
+            System.out.println("This list is not in order :( sort it out...");
+        }
 
+        // Verification for Quick Sort
+        test = false;
+        charList = generateTestList(N, k, minV, maxV );
+        list = convert2dCharToStringList(charList);
+        System.out.println("Before Sorting");
+        printStringList(list);
+        quickSort(list, 0 , list.length-1);
+        System.out.println();
+        System.out.println("After Sorting");
+        printStringList(list);
+        System.out.println();
+        test = isSorted(list);
+        System.out.println("Generating list of length " + list.length + " , key width of "+ k +":\nTesting on Quick Sort...");
+        if(test == true)
+        {
+            System.out.println("Boo Yah This list is Sorted!\n");
+        }else{
+            System.out.println("This list is not in order :( sort it out...\n");
+        }
+        */
+        // Verification for Radix Sort
+        N = 128;
+        k = 6;
+        test = false;
+        charList = generateTestList(N, k, minV, maxV );
+        list = convert2dCharToStringList(charList);
+        System.out.println("Before Sorting");
+        printStringList(list);
+        radixSort(list, 1 );
+        System.out.println();
+        System.out.println("After Sorting");
+        printStringList(list);
+        System.out.println();
+        test = isSorted(list);
+        System.out.println("Generating list of length " + list.length + " , key width of "+ k +" and d value of "+ d+ ":\nTesting on Radix Sort...");
+        if(test == true)
+        {
+            System.out.println("Boo Yah This list is Sorted!\n");
+        }else{
+            System.out.println("This list is not in order :( sort it out...\n");
+        }
 
     }
 
@@ -105,19 +586,19 @@ public class Main {
         }
         System.out.println();
     }
-    /** Generates a random char array of size N ranging from minV to Max V, adds a null terminator at the kth index **/
+    // Generates a random char array of size N ranging from minV to Max V, adds a null terminator at the kth index
     public static char[][] generateTestList(int N, int k, int minV, int maxV) {
         char[][] charList = new char[N][k+1];
         Random rand = new Random();
 
-        /** fill a 2d char array with random chars from minV to maxV **/
+        // fill a 2d char array with random chars from minV to maxV
         for ( int i = 0; i < charList.length; i++)
         {
             for( int j = 0; (charList[i] != null && j < charList[i].length-1); j++)
             {
-                /** insert random char from minV to maxV at pos i , j **/
+                // insert random char from minV to maxV at pos i , j
                 charList[i][j] = (char) ((char)  rand.nextInt(maxV - minV + 1) + minV);
-                /** insert a null character at the end of every charList[i] **/
+                // insert a null character at the end of every charList[i] **/
                 if ( j == k + 1) {
                     charList[i][k + 1] = '\0';
                 }
@@ -325,19 +806,20 @@ public class Main {
         threeWayRadixQSort(list, i, high, d);
     }
 
-    public static void lsd(String[] list, int d)
+    public static void radixSort(String[] list, int d)
     {
         int N = list.length;
         String[] output = new String[N];
+        int R = 256; //range of values we are using
         // outer loop to iterate by each digit's place starting from the right moving left
         for ( int digit = d-1; digit >= 0; digit--)
         {
-            int[] buckets = new int[256];
+            int[] buckets = new int[R+1];
             // count the frequency of each digit in each string store into bucket array
             for ( int i = 0; i < N; i++)
                 buckets[list[i].charAt(digit)+1]++;
             // do a prefix sum on buckets
-            for ( int j = 1; j < 256; j++)
+            for ( int j = 1; j < R; j++)
                 buckets[j] = buckets[j] + buckets[j-1];
             // build the output from our prefix sums
             for (int i = 0; i < N; i++)
